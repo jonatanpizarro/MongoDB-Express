@@ -1,52 +1,95 @@
 var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
-var db;
-
-MongoClient.connect('mongodb://localhost:27017/', (err, client) => {
-	if (err) return console.log(err)
-	 db = client.db("AppJuegos");
-})
+var dbname = "AppJuegos";
 
 
 
-/* GET home page. */
+
+
+/* INDEX*/
 router.get('/', (req, res) => {
-	db.collection('juegos').find('nombre').toArray((err, result) => {
+
+  MongoClient.connect('mongodb://localhost:27017/', (err, db) => {
+  if (err) return console.log(err)
+   var dbo = db.db(dbname);
+
+     dbo.collection('juegos').find('nombre').toArray((err, result) => {
     if (err) return console.log(err)
-    // renders index.ejs
-    res.render('index.ejs', {juegos: result});
+      db.close();
+      res.render('index.ejs', {juegos: result});
   })
+
 })
+ 
+})
+
+///////////////////CREAR/////////////////////////////////7
+
 
 
 router.get('/crear', (req, res) => {
-	var myobj = { nombre: "", edad: "", genero:"" };
-	dbo.collection("juegos").insertOne(myobj, function((err, result) => {
+    res.render('create.ejs');
+  })
+
+
+router.post('/crear', (req, res) => {
+
+   MongoClient.connect('mongodb://localhost:27017/', (err, db) => {
     if (err) return console.log(err)
-    // renders index.ejs
-    res.render('crear.ejs', {juegos: result});
+      var dbo = db.db(dbname);
+      var myobj = { nombre: req.body.nombre, edad: parseInt(req.body.edad), tipo:req.body.tipo };
+      dbo.collection("juegos").insertOne(myobj, function(err, result)  {
+      if (err) return console.log(err)
+        db.close();
+        res.redirect('/');
   })
 })
+  })
+
+
+
+///////////////////ELIMINAR////////////////////////////////
 
 router.get('/eliminar', (req, res) => {
-	var myquery = ;
-  	dbo.collection("juegos").deleteOne(myquery, function((err, obj) => {
+    res.render('delete.ejs');
+  })
+
+router.post('/eliminar', (req, res) => {
+  MongoClient.connect('mongodb://localhost:27017/', (err, db) => {
     if (err) return console.log(err)
-    // renders index.ejs
-    res.render('eliminar.ejs');
+      var dbo = db.db(dbname);
+      var myobj = { nombre: req.body.nombre};
+      dbo.collection("juegos").deleteOne(myobj ,function(err, obj)  {
+    if (err) return console.log(err)
+      db.close();
+      res.redirect('/');
   })
 })
+  })
+
+///////////////EDITAR/////////////////////////////////
+
+
 
 router.get('/editar', (req, res) => {
-	var myquery = {  };
-	var newvalues = { $set: {nombre:"" , edad: "", genero:"" } };
-	dbo.collection("juegos").updateOne(myquery, newvalues,((err, result) => {
+    res.render('edit.ejs');
+  })
+  
+
+router.post('/editar', (req, res) => {
+  MongoClient.connect('mongodb://localhost:27017/', (err, db) => {
+    if (err) return console.log(err)
+      var dbo = db.db(dbname);
+      var myquery = {nombre: req.body.nombre1 };
+      var newvalues = { $set: { nombre: req.body.nombre, edad: parseInt(req.body.edad), tipo:req.body.tipo} };
+      dbo.collection("juegos").updateOne(myquery, newvalues,(err, result) => {
     if (err) return console.log(err)
     // renders index.ejs
-    res.render('editar.ejs', {juegos: result});
+    res.redirect('/');
   })
 })
+  })
 
 
 

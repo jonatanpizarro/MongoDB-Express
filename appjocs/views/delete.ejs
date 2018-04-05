@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/stylesheets/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/javascripts/js/bootstrap.min.js"></script>
+  </head>
+
+  <body>
+	<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link " id="nav-home-tab" data-toggle="tab" href="/" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="/crear" role="tab" aria-controls="nav-profile" aria-selected="false">Crear</a>
+    <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="/eliminar" role="tab" aria-controls="nav-profile" aria-selected="false">Eliminar</a>
+    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="/editar" role="tab" aria-controls="nav-contact" aria-selected="false">Editar</a>
+  </div>
+</nav>
+<div class="content">
+	<form action="/eliminar" method="post">
+    <label for="name">Nombre del juego que quieres eliminar: </label>
+    <input id="name" type="text" name="nombre" value="">
+    <input type="submit" value="OK">
+</form>
+</div>
+   
+  </body>
+</html>
